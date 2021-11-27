@@ -19,23 +19,17 @@ def showIntro():
 def getForces():
     global usrArmy, usrNavy, usrAir
 
-    print("DISTRIBUTE YOUR FORCES.")
-    print("              ME              YOU")
-    print("ARMY           " + str(cpuArmy) + "        ? ", end="")
-    input()
-    print("NAVY           " + str(cpuNavy) + "        ? ", end="")
-    input()
-    print("A. F.          " + str(cpuAir) + "        ? ", end="")
-    input()
-    while (usrArmy + usrNavy + usrAir) > MAX_UNITS:
+    while True:
         print("DISTRIBUTE YOUR FORCES.")
         print("              ME              YOU")
         print("ARMY           " + str(cpuArmy) + "        ? ", end="")
-        input()
+        usrArmy = int(input())
         print("NAVY           " + str(cpuNavy) + "        ? ", end="")
-        input()
+        usrNavy = int(input())
         print("A. F.          " + str(cpuAir) + "        ? ", end="")
-        input()
+        usrAir = int(input())
+        if not ((usrArmy + usrNavy + usrAir) > MAX_UNITS):
+            break
 
 
 def attackFirst():
@@ -45,24 +39,28 @@ def attackFirst():
     numUnits = 0
     unitType = 0
 
-    while unitType < 1 or unitType > 3:
+    while True:
         print("YOU ATTACK FIRST. TYPE (1) FOR ARMY; (2) FOR NAVY;")
         print("AND (3) FOR AIR FORCE.")
         print("?", end=' ')
         unitType = int(input())
-
-    while (numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or (
-            (unitType == 1) and (numUnits > usrNavy)) or ((unitType == 1) and (numUnits > usrAir)):
+        if not (unitType < 1 or unitType > 3):
+            break
+ 
+    while True:
         print("HOW MANY MEN")
         print("?", end=' ')
         numUnits = int(input())
+        if  not ((numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or (
+            (unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir))):
+            break
 
     if unitType == 1:
         if numUnits < (usrArmy / 3):
-            print("YOU LOST " + numUnits + " MEN FROM YOUR ARMY.")
+            print("YOU LOST " + str(numUnits) + " MEN FROM YOUR ARMY.")
             usrArmy = usrArmy - numUnits
         elif numUnits < (2 * usrArmy / 3):
-            print("YOU LOST " + int(numUnits / 3) + " MEN, BUT I LOST " + int(2 * cpuArmy / 3))
+            print("YOU LOST " + str(int(numUnits / 3)) + " MEN, BUT I LOST " + str(int(2 * cpuArmy / 3)))
             usrArmy = int(usrArmy - (numUnits / 3))
             cpuArmy = 0
         else:
@@ -76,7 +74,7 @@ def attackFirst():
             print("YOUR ATTACK WAS STOPPED!")
             usrNavy = usrNavy - numUnits
         elif numUnits < 2 * cpuNavy / 3:
-            print("YOU DESTROYED " + int(2 * cpuNavy / 3) + " OF MY ARMY.")
+            print("YOU DESTROYED " + str(int(2 * cpuNavy / 3)) + " OF MY ARMY.")
             cpuNavy = int(cpuNavy / 3)
         else:
             print("YOU SUNK ONE OF MY PATROL BOATS, BUT I WIPED OUT TWO")
@@ -102,28 +100,33 @@ def attackFirst():
 
 def attackSecond():
     global usrArmy, usrNavy, usrAir, cpuArmy, cpuNavy, cpuAir
+    global planeCrashWin
     numUnits = 0
     unitType = 0
 
     print("")
     print("              YOU           ME")
     print("ARMY           ", end="")
-    print("%-14s%s\n" % (usrArmy, cpuArmy))
+    print("%-14s%s\n" % (usrArmy, cpuArmy), end="")
     print("NAVY           ", end="")
-    print("%-14s%s\n" % (usrNavy, cpuNavy))
+    print("%-14s%s\n" % (usrNavy, cpuNavy), end="")
     print("A. F.          ", end="")
-    print("%-14s%s\n" % (usrAir, cpuAir))
+    print("%-14s%s\n" % (usrAir, cpuAir), end="")
 
-    while (unitType < 1) or (unitType > 3):
+    while True:
         print("WHAT IS YOUR NEXT MOVE?")
         print("ARMY=1  NAVY=2  AIR FORCE=3")
         print("? ", end="")
-        unitType = input()
-
-    while (numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or ((unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir)):
+        unitType = int(input())
+        if not ((unitType < 1) or (unitType > 3)):
+            break
+        
+    while True:
         print("HOW MANY MEN")
         print("? ", end="")
-        numUnits = input()
+        numUnits = int(input())
+        if not((numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or ((unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir))):
+            break
 
     if unitType == 1:
         if numUnits < (cpuArmy/2):
@@ -176,11 +179,5 @@ def main():
     attackSecond()
     
 if __name__ == '__main__':
-    usrArmy = 0 
-    usrNavy = 0
-    usrAir = 0
-    cpuArmy = 30000
-    cpuNavy = 20000
-    cpuAir = 22000
     main()
     
